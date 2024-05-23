@@ -1,0 +1,82 @@
+# load packages
+library(dplyr)
+library(ggplot2)
+setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ2")
+
+df <- read.csv("CycloneNSpdxTools.csv")
+df$X <- NULL
+date1 <- as.POSIXct(df$current_date, tz = "UTC", format = "%Y-%m-%d")
+date2 <- as.POSIXct(df$creation_date, tz = "UTC", format = "%Y-%m-%d")
+# Calculate the difference in days
+df$days <- as.numeric(difftime(date1, date2, units = "days"))
+View(df)
+
+df[, 4:12] <- df[, 4:12] / df$days
+
+gathered_df <- gather(df, attribute, count, -Format, -Tool, -link, -creation_date, -current_date, -days)
+View(gathered_df)
+gathered_df$link <- NULL
+gathered_df$Tool <- NULL
+gathered_df$days <- NULL
+gathered_df$creation_date <- NULL
+gathered_df$current_date <- NULL
+df <- gathered_df
+names(df)[names(df) == "Format"] <- "format"
+
+df <- df %>%
+  filter(attribute!="ClosedIssues") %>%
+  filter(attribute!="OpenIssues") 
+
+plot <- ggplot(df, aes(x=reorder(attribute, -(as.numeric(count))), y=log((as.numeric(count))), fill=format)) + 
+  geom_boxplot() +
+  ylab("Log of metric_value / #days") + xlab("Github Metrics") +
+  labs(fill = "Format ") +
+  theme(legend.position="top") +
+  facet_wrap( ~ attribute, scales="free") +
+#  theme(axis.text.y = element_blank()) +
+  theme(
+    strip.background = element_blank(),
+    strip.text.x = element_blank()
+  )
+
+pdf(file = "tool_metrics.pdf",width = 4, height = 3.5)
+plot
+dev.off()
+
+names(df)[names(df) == "format"] <- "identifier"
+
+df <- na.omit(df)
+class_spdx <- subset(df, identifier == "SPDX")
+class_cdx <- subset(df, identifier == "CycloneDx")
+# Perform paired Wilcoxon signed-rank test for each identifier
+for (id in unique(df$attribute)) {
+  cat("attribute:", id, "\n")
+  
+  # Subset data for the current identifier
+  id_data_A <- subset(class_spdx, attribute == id)$count
+  id_data_B <- subset(class_cdx, attribute == id)$count
+  
+  # Perform Wilcoxon signed-rank test
+  #print(wilcox.test(id_data_A, id_data_B, paired = FALSE))
+  
+  mw_test <- wilcox.test(id_data_A, id_data_B, paired = FALSE)
+  
+  # Calculate Cliff's delta
+  cliffs_delta <- function(x, y) {
+    n1 <- sum(!is.na(x))
+    n2 <- sum(!is.na(y))
+    sum(ifelse(outer(x, y, "<"), 1, 0)) / (n1 * n2)
+  }
+
+  delta <- cliffs_delta(id_data_A, id_data_B)
+  cat("cliff's delta:", delta, "\n")
+  cat("\n")
+}
+
+
+df3 <- df %>%
+  group_by(identifier, attribute) %>%
+  summarise(mean=mean(as.numeric(count)),
+            median = median((count)))
+
+
