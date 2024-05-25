@@ -1,0 +1,50 @@
+Tool,Search Pattern
+&cyclonedx-maven-plugin& CycloneDX/cyclonedx-maven-plugin,cyclonedx-maven-plugin\\
+&cyclonedx-python-lib& CycloneDX/cyclonedx-python-lib\\
+&cdxgen& npm:@cyclonedx/cdxgen,cdxgen -t,.verify(bomSignature\\
+&cyclonedx-dotnet-library& CycloneDX.Core,CycloneDX.Utils,CycloneDX.Spdx,CycloneDX.Spdx.Interop\\
+&cyclonedx-node-npm& cyclonedx-npm\\
+&cyclonedx-core-java& <artifactId>cyclonedx-core-java</artifactId>\\
+&cyclonedx-php-composer& cyclonedx/cyclonedx-php-composer\\
+&cyclonedx-webpack-plugin& new CycloneDxWebpackPlugin\\
+&cyclonedx-javascript-library& require('@cyclonedx/cyclonedx-library'),.Enums.ComponentType.Application\\
+&cyclonedx-php-library& CycloneDX/cyclonedx-php-library\\
+&cyclonedx-cli& CycloneDX/cyclonedx-cli\\
+&cyclonedx-conan& CycloneDX/cyclonedx-conan\\
+&cyclonedx-rust-cargo& CycloneDX/cyclonedx-rust-cargo\\
+&cyclonedx-dotnet& cyclonedx-dotnet-generate,cyclonedx-dotnet\\
+&cyclonedx-gomod& cyclonedx-gomod,CycloneDX/cyclonedx-gomod\\
+&cyclonedx-python& cyclonedx-python,Python cyclonedx_py\\
+&cyclonedx-go& cyclonedx-go\\
+&cyclonedx-node-module& npx cyclonedx-bom,cyclonedx-node-module\\
+&cyclonedx-node-pnpm& cyclonedx-node-pnpm\\
+&cyclonedx-ruby-gem& cyclonedx-ruby-gem,cyclonedx-ruby\\
+&cyclonedx-gradle-plugin& cyclonedx-gradle-plugin\\
+&action-owasp-dependecy-track-check& uses: Quobis/action-owasp-dependecy-track-check\\
+&bombon& nikstur/bombon\\
+&build-info-go& build-info-go\\
+&gh-dotnet-generate-sbom& CycloneDX/gh-dotnet-generate-sbom\\
+&voltone/sbom& voltone/sbom\\
+&voltone/rebar3_sbom& rebar3_sbom\\
+&ozonru/cyclonedx-go& cyclonedx-go\\
+&sbt-bom& sbt-bom\\
+&cyclonedx-buildroot& cyclonedxbuildroot.cli.generateBom\\
+&cyclonedx-editor-validator& cdx-ev\\
+&cyclonedx-npm-pipe& ccideas/cyclonedx-npm-pipe\\
+&dependency-track-plugin& artifactId: ae-dependency-track-plugin\\
+&sbom-cli-plugin& sbom-cli-plugin\\
+&dtrack-audit& dtrack-audit\\
+&DTrackAuditor& dtrackauditor.py\\
+&gh-sbom& gh-sbom\\
+&gobom& gobom generate\\
+&ko-build/ko& ko-build/ko\\
+&LicenseComplianceTool& license-compliance-tool-cli.jar\\
+&meta-dependencytrack& meta-dependencytrack\\
+&parlay& snyk/parlay\\
+&pip-audit& -f cyclonedx\\
+&sbom-cli& -format cyclonedx\\
+&srcclr_sbom_gen& import srcclr_sbom_gen\\
+&swift-package-sbom& sbom generate\\
+&technolinator& TechnolinatorConfig\\
+&vexy& VEXY_CONFIG\\
+&vsm-sbom-booster& vsm-sbom-booster\\
