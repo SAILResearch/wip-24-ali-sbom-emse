@@ -9,15 +9,13 @@
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\fs24 \cf0 \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 \
+\
 Started with 171 Cdx and 470 spdx repos.\
 Extracted issues:\
 No. of Cdx issues: 17,795 issues of cdx 90 repositories. \
 No. of Spdx issues: 19,195 issues of spdx 191 repositories. \
 \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 \
+\
 Visualizations:\
 1. Show how many open and closed issues exist in each format. Compare with wilcoxon too.\
 a. On applying wilcoxon with bonferroni, we find a statistically significant difference between the issues between CDX and SPDX, with a p-value of 0.0012 and cliff\'92s delta of 0.603.\
@@ -26,28 +24,28 @@ c. There is no statistically significant difference though between the closed is
 d. The visualization of open .vs. close is available in cdx_vs_spdx_issues.pdf (13,352 closed for spdx, 5,342 open for spdx, 13,281 closed for cdx , 4,514 open for cdx.\
 e. Cdx closed avg 
 \f1\fs22 \cb2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 170.26923 with sd 458.8266,
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0  open avg 
+170.26923 with sd 458.8266,
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0  open avg 
 \f1\fs22 \cb4 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 55.04878
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0  with sd 
+55.04878
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0  with sd 
 \f1\fs22 \cb4 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 145.6175.
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0  Spdx closed avg 
+145.6175.
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0  Spdx closed avg 
 \f1\fs22 \cb2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 88.79487 with sd 306.7217,
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0  open avg 
+88.79487 with sd 306.7217,
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0  open avg 
 \f1\fs22 \cb4 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 37.09722 with sd 163.4658
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 .\
+37.09722 with sd 163.4658
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 .\
 \
 2. Show how many closed issues are resolved quickly in each format. Compare wilcoxon first.\
 a. The visualization of open .vs. close is available in cdx_vs_spdx_resolve_time.pdf\
 b. The resolve time b/w cdx and spdx is significantly diff with p-value = 8.33e-64 and effect size=0.102 (small)\
 c. Avg resolution time for SPDX ( 
 \f1\fs22 \cb4 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 12678768 with SD 25452556) and CDX (\cb2 \strokec3 8528478 with SD 18057422\cb4 \strokec3 ), jub k issues b CDX k zeada hain still they\'92re doing better in terms of response time :).
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+12678768 with SD 25452556) and CDX (\cb2 8528478 with SD 18057422\cb4 ), jub k issues b CDX k zeada hain still they\'92re doing better in terms of response time :).
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \
 \
 TREND ANALYSIS:\
 Since there is an obvious difference in the resolution time and number of issues in both formats, we dig deeper to see whats the trend.\
@@ -56,8 +54,7 @@ Since there is an obvious difference in the resolution time and number of issues
 It is evident from Figure-5 of the previous draft that CycloneDx has more stars and watchers than SPDX (grab data from Arshdeep\'92s files), so it means more community is engaged towards CDX tools and therefore there are more issues too. As number of stars and watchers have positive correlation with issues (Cite literature, otherwise forget this point). It is intuitive that CycloneDx tends to have more issues. If SPDX had stronger community and less issues it would have shown that SPDX have better tools.\
 \
 \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 2. Plot past three years trend and see whose issues are increasing and is the resolution time improving simultaneously or not?\
+2. Plot past three years trend and see whose issues are increasing and is the resolution time improving simultaneously or not?\
 Show two figures side by side, left side cdx_vs_spdx_issues_trend.pdf and right side cdx_vs_spdx_resolve_trend.pdf.\
 These figures are showing the Cyclonedx projects\'92 issues are increasing, yet their resolution time is decreasing which is awesome.\
 \
@@ -76,12 +73,12 @@ We then merge the tags that are technically same but have distinct names to each
 After merging the tags, we group the similar ones in a broader category.\
 For this process, the first author sort the tags and group the ones that have similar purpose, e.g., \'93defect\'94, \'93technical issue\'94 and \'93bug\'94 categorized as \'93Bug fixes and Defects\'94, docs and documentation categorized as \'93Documentation\'94, and \'93enhancement\'94, \'93must have\'94, \'93nice to have\'94 and \'93feature\'94 categorized as \'93
 \f2\fs32 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 Feature Development and Enhancement\'94. The last author re-analyzed the categories of the tags and raised 10 concerns related to the possible duplication of tags e.g., \\cdx having two tags named \'93stale\'94, mis-judgement of categories e.g., \'93docs\'94 falling into \'93CI/CD\'94 category instead of \'93Documentation\'94, and better naming convention, e.g., \'93Bug Fix\'94 should be \'93Bug Fixes and Defects\'94. Both authors discussed these issues and finalized 14 distinct categories of 105 tags, 50 \\cdx tags and 55 \\spdx tags.\
+Feature Development and Enhancement\'94. The last author re-analyzed the categories of the tags and raised 10 concerns related to the possible duplication of tags e.g., \\cdx having two tags named \'93stale\'94, mis-judgement of categories e.g., \'93docs\'94 falling into \'93CI/CD\'94 category instead of \'93Documentation\'94, and better naming convention, e.g., \'93Bug Fix\'94 should be \'93Bug Fixes and Defects\'94. Both authors discussed these issues and finalized 14 distinct categories of 105 tags, 50 \\cdx tags and 55 \\spdx tags.\
 These 14 issue categories reflect 87 distinct tool repositories of \\spdx and 61 of \\cdx. (see categories.csv)\
 \
 These tags represent 
-\f1\fs22 \cb2 \strokec3 17,251 \\cdx issues, and 12,036 \\spdx issues.
-\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\f1\fs22 \cb2 17,251 \\cdx issues, and 12,036 \\spdx issues.
+\f0\fs24 \cb1 \kerning1\expnd0\expndtw0 \
 1. Find the most occurring tags in SPDX and CDX\
 Can be found here: tags_prevalence.pdf\
 \
