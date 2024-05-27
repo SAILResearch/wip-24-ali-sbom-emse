@@ -21,15 +21,6 @@ input_file_path = os.path.join(script_dir, 'CycloneNSpdxTools_with_dates.csv')
 # Load the CSV file
 df = pd.read_csv(input_file_path)
 
-# Extract repository owner and name from the URL
-def extract_repo_info(url):
-    match = re.search(r'github\.com/([^/]+)/([^/]+)', url)
-    if match:
-        return match.groups()
-    return None, None
-
-df['repo_owner'], df['repo_name'] = zip(*df['link'].apply(extract_repo_info))
-
 headers = {'Authorization': f'token {GITHUB_TOKEN}'}
 
 # Function to fetch commits for a repository
@@ -59,15 +50,15 @@ def get_commit_counts(owner, repo):
     return commit_counts
 
 # Get commit counts for each repository
-all_commit_counts = {}
+commit_count_repos = {}
 for _, row in df.iterrows():
-    owner, repo = row['repo_owner'], row['repo_name']
+    owner, repo = row['Repo'].split('/')
     print(f'Processing repository: {owner}/{repo}')
     commit_counts = get_commit_counts(owner, repo)
-    all_commit_counts[f'{owner}/{repo}'] = dict(commit_counts)
+    commit_count_repos[f'{owner}/{repo}'] = dict(commit_counts)
     
 output_file_path = os.path.join(script_dir, 'commit_counts_by_repo.pkl')
 
 # Save the nested dictionary to a pickle file
 with open(output_file_path, 'wb') as f:
-    pickle.dump(all_commit_counts, f)
+    pickle.dump(commit_count_repos, f)
