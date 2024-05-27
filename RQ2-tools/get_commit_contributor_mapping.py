@@ -1,23 +1,25 @@
 import pandas as pd
-import re
 import requests
-from collections import defaultdict
 import argparse
 import pickle
+import re
+import os
+
+from collections import defaultdict
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Fetch and process commit data from GitHub repositories.')
 parser.add_argument('token', type=str, help='GitHub personal access token')
-parser.add_argument('csv_file', type=str, help='Path to the CSV file containing repository data')
-
 args = parser.parse_args()
 
 # Use the provided arguments
 GITHUB_TOKEN = args.token
-file_path = args.csv_file
+    
+script_dir = os.path.dirname(os.path.realpath(__file__))
+input_file_path = os.path.join(script_dir, 'CycloneNSpdxTools_with_dates.csv')
 
 # Load the CSV file
-df = pd.read_csv(file_path)
+df = pd.read_csv(input_file_path)
 
 # Extract repository owner and name from the URL
 def extract_repo_info(url):
@@ -57,18 +59,15 @@ def get_commit_counts(owner, repo):
     return commit_counts
 
 # Get commit counts for each repository
-all_commit_counts = defaultdict(int)
+all_commit_counts = {}
 for _, row in df.iterrows():
     owner, repo = row['repo_owner'], row['repo_name']
     print(f'Processing repository: {owner}/{repo}')
-    if owner and repo:
-        commit_counts = get_commit_counts(owner, repo)
-        for contributor, count in commit_counts.items():
-            all_commit_counts[contributor] += count
+    commit_counts = get_commit_counts(owner, repo)
+    all_commit_counts[f'{owner}/{repo}'] = dict(commit_counts)
+    
+output_file_path = os.path.join(script_dir, 'commit_counts_by_repo.pkl')
 
-# Sort the dictionary by commit number
-sorted_commit_counts = dict(sorted(all_commit_counts.items(), key=lambda item: item[1], reverse=True))
-
-# Save the dictionary to a pickle file
-with open('commit_counts.pkl', 'wb') as f:
-    pickle.dump(sorted_commit_counts, f)
+# Save the nested dictionary to a pickle file
+with open(output_file_path, 'wb') as f:
+    pickle.dump(all_commit_counts, f)
