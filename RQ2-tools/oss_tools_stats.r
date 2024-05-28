@@ -1,25 +1,28 @@
 # load packages
 library(dplyr)
 library(ggplot2)
-setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ2")
+setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ2-tools")
 
 df <- read.csv("CycloneNSpdxTools.csv")
 df$X <- NULL
-date1 <- as.POSIXct(df$current_date, tz = "UTC", format = "%Y-%m-%d")
-date2 <- as.POSIXct(df$creation_date, tz = "UTC", format = "%Y-%m-%d")
+#collection date
+date1 <- as.POSIXct("2024-05-28", tz = "UTC", format = "%Y-%m-%d")
+#repo creation date
+date2 <- as.POSIXct(df$CreationDate, tz = "UTC", format = "%Y-%m-%d")
 # Calculate the difference in days
 df$days <- as.numeric(difftime(date1, date2, units = "days"))
 View(df)
 
-df[, 4:12] <- df[, 4:12] / df$days
+df[, 6:14] <- (df[, 6:14] / df$days)*10000
 
-gathered_df <- gather(df, attribute, count, -Format, -Tool, -link, -creation_date, -current_date, -days)
+gathered_df <- gather(df, attribute, count, -Format, -Tool, -Language, -Repo, -CreationDate, -Language, -days)
 View(gathered_df)
-gathered_df$link <- NULL
+gathered_df$Repo <- NULL
 gathered_df$Tool <- NULL
+gathered_df$Language <- NULL
 gathered_df$days <- NULL
-gathered_df$creation_date <- NULL
-gathered_df$current_date <- NULL
+gathered_df$CreationDate <- NULL
+
 df <- gathered_df
 names(df)[names(df) == "Format"] <- "format"
 
@@ -29,7 +32,7 @@ df <- df %>%
 
 plot <- ggplot(df, aes(x=reorder(attribute, -(as.numeric(count))), y=log((as.numeric(count))), fill=format)) + 
   geom_boxplot() +
-  ylab("Log of metric_value / #days") + xlab("Github Metrics") +
+  ylab("Log of (count / #days of repository)") + xlab("Github Metrics") +
   labs(fill = "Format ") +
   theme(legend.position="top") +
   facet_wrap( ~ attribute, scales="free") +
