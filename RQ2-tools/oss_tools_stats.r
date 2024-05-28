@@ -36,7 +36,7 @@ plot <- ggplot(df, aes(x=reorder(attribute, -(as.numeric(count))), y=log((as.num
   labs(fill = "Format ") +
   theme(legend.position="top") +
   facet_wrap( ~ attribute, scales="free") +
-#  theme(axis.text.y = element_blank()) +
+  #  theme(axis.text.y = element_blank()) +
   theme(
     strip.background = element_blank(),
     strip.text.x = element_blank()
@@ -70,7 +70,7 @@ for (id in unique(df$attribute)) {
     n2 <- sum(!is.na(y))
     sum(ifelse(outer(x, y, "<"), 1, 0)) / (n1 * n2)
   }
-
+  
   delta <- cliffs_delta(id_data_A, id_data_B)
   cat("cliff's delta:", delta, "\n")
   cat("\n")
