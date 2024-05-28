@@ -5,8 +5,8 @@ setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/R
 
 df <- read.csv("CycloneNSpdxTools.csv")
 df$X <- NULL
-date1 <- as.POSIXct(df$CurrentDate, tz = "UTC", format = "%Y-%m-%d")
-date2 <- "2024-05-28"
+date1 <- "2024-01-01"
+date2 <- as.POSIXct(df$CreationDate, tz = "UTC", format = "%Y-%m-%d")
 
 # Calculate the difference in days
 df$days <- as.numeric(difftime(date1, date2, units = "days"))
