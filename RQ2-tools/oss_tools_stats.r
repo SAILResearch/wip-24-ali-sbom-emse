@@ -5,21 +5,21 @@ setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/R
 
 df <- read.csv("CycloneNSpdxTools.csv")
 df$X <- NULL
-date1 <- as.POSIXct(df$current_date, tz = "UTC", format = "%Y-%m-%d")
-date2 <- as.POSIXct(df$creation_date, tz = "UTC", format = "%Y-%m-%d")
+date1 <- as.POSIXct(df$CurrentDate, tz = "UTC", format = "%Y-%m-%d")
+date2 <- as.POSIXct(df$CreationDate, tz = "UTC", format = "%Y-%m-%d")
 # Calculate the difference in days
 df$days <- as.numeric(difftime(date1, date2, units = "days"))
 View(df)
 
 df[, 4:12] <- df[, 4:12] / df$days
 
-gathered_df <- gather(df, attribute, count, -Format, -Tool, -link, -creation_date, -current_date, -days)
+gathered_df <- gather(df, attribute, count, -Format, -Tool, -link, -CreationDate, -CurrentDate, -days)
 View(gathered_df)
 gathered_df$link <- NULL
 gathered_df$Tool <- NULL
 gathered_df$days <- NULL
-gathered_df$creation_date <- NULL
-gathered_df$current_date <- NULL
+gathered_df$CreationDate <- NULL
+gathered_df$CurrentDate <- NULL
 df <- gathered_df
 names(df)[names(df) == "Format"] <- "format"
 
