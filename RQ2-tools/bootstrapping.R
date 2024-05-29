@@ -18,6 +18,8 @@ bootstrap_median <- function(data) {
     
     # Create an empty vector to store bootstrapped medians
     bootstrapped_attr_medians <- numeric(n_bootstraps)
+    # Create an empty vector to store bootstrapped medians
+    bootstrapped_attr_means <- numeric(n_bootstraps)
     
     # Perform bootstrapping
     for (i in 1:n_bootstraps) {
@@ -25,17 +27,20 @@ bootstrap_median <- function(data) {
       bootstrap_sample <- sample(attr_data$count, replace = TRUE)
       # Calculate the median for the bootstrap sample
       bootstrapped_attr_medians[i] <- median(bootstrap_sample)
+      bootstrapped_attr_means[i] <- mean(bootstrap_sample)
     }
     
     # Estimate the true median
     true_median <- median(bootstrapped_attr_medians)
+    # Estimate the true median
+    true_mean <- mean(bootstrapped_attr_means)
     
     # Calculate the 95% confidence interval
     lower_ci <- quantile(bootstrapped_attr_medians, 0.025)
     upper_ci <- quantile(bootstrapped_attr_medians, 0.975)
     
     # Store the attribute, its median, and confidence intervals in the dataframe
-    bootstrapped_results <- rbind(bootstrapped_results, data.frame(attribute = attr, median_count = true_median, lower_ci = lower_ci, upper_ci = upper_ci))
+    bootstrapped_results <- rbind(bootstrapped_results, data.frame(attribute = attr, mean_count = true_mean, median_count = true_median, lower_ci = lower_ci, upper_ci = upper_ci))
   }
   
   return(bootstrapped_results)
