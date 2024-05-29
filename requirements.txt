@@ -5,3 +5,4 @@ kaleido
 nbformat
 cliffs_delta
 scipy
+jinja2
