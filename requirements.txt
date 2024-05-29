@@ -3,3 +3,5 @@ requests
 plotly
 kaleido
 nbformat
+cliffs_delta
+scipy
