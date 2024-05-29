@@ -1,12 +1,23 @@
 # load packages
 library(dplyr)
 library(ggplot2)
-setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/DataCollectionNew/arshdeep/RQ4")
+setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ4-project")
 
 df <- read.csv("top200_sample.csv")
 
 
-gathered_df <- gather(df, attribute, count, -type, -tool_used, -link, -duration, -Commits,  -packages)
+#collection date
+date1 <- as.POSIXct("2024-05-28", tz = "UTC", format = "%Y-%m-%d")
+#repo creation date
+date2 <- as.POSIXct(df$creation_date, tz = "UTC", format = "%Y-%m-%d")
+# Calculate the difference in days
+df$days <- as.numeric(difftime(date1, date2, units = "days"))
+#View(df)
+
+df[, 5:15] <- (df[, 5:15] / df$days)
+
+
+gathered_df <- gather(df, attribute, count, -type, -tool_used, -link, -Commits,  -packages)
 gathered_df$link <- NULL
 gathered_df$tool_used <- NULL
 
