@@ -2,8 +2,8 @@ link,type,tool_used,creation_date,language,contributors,openIssues,closedIssues,
 https://github.com/DefinitelyTyped/DefinitelyTyped,CycloneDX,cyclonedx-php-composer,2012-10-05T16:39:45Z,TypeScript,395.0,543.0,7476.0,87063.0,145.0,58765.0,1.0,29845.0,47411.0,656.0
 https://github.com/apache/airflow,CycloneDX,swift-package-sbom,2015-04-13T18:04:58Z,Python,419.0,798.0,8284.0,24610.0,176.0,26433.0,83.0,13657.0,34877.0,753.0
 https://github.com/aquasecurity/trivy,CycloneDX,cyclonedx-go,2019-04-11T01:01:07Z,Go,369.0,161.0,2350.0,2876.0,31.0,2794.0,143.0,2138.0,21706.0,169.0
-https://github.com/JetBrains/intellij-community,CycloneDX,build-info-go,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
-https://github.com/GoogleContainerTools/skaffold,CycloneDX,ko-build/ko,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
+https://github.com/JetBrains/intellij-community,CycloneDX,build-info-go,2011-09-30T13:33:05Z,,269.0,0.0,0.0,443575.0,278.0,2405.0,0.0,5155.0,16669.0,532.0
+https://github.com/GoogleContainerTools/skaffold,CycloneDX,ko-build/ko,2018-01-23T18:51:29Z,Go,397.0,737.0,3365.0,8910.0,41.0,5271.0,177.0,1609.0,14741.0,184.0
 https://github.com/NixOS/nixpkgs,CycloneDX,cyclonedx-python-lib,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
 https://github.com/Homebrew/homebrew-core,CycloneDX,cyclonedx-gomod,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
 https://github.com/emqx/emqx,CycloneDX,voltone/rebar3_sbom,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
