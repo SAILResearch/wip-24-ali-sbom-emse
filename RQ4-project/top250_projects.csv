@@ -6,7 +6,7 @@ https://github.com/JetBrains/intellij-community,CycloneDX,build-info-go,2011-09-
 https://github.com/GoogleContainerTools/skaffold,CycloneDX,ko-build/ko,2018-01-23T18:51:29Z,Go,397.0,737.0,3365.0,8910.0,41.0,5271.0,177.0,1609.0,14741.0,184.0
 https://github.com/NixOS/nixpkgs,CycloneDX,cyclonedx-python-lib,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
 https://github.com/Homebrew/homebrew-core,CycloneDX,cyclonedx-gomod,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
-https://github.com/emqx/emqx,CycloneDX,voltone/rebar3_sbom,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
+https://github.com/emqx/emqx,CycloneDX,rebar3_sbom,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
 https://github.com/cert-manager/cert-manager,CycloneDX,ko-build/ko,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
 https://github.com/future-architect/vuls,CycloneDX,cyclonedx-go,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
 https://github.com/owasp-amass/amass,CycloneDX,cyclonedx-gomod,,,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0
