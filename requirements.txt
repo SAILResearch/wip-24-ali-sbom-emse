@@ -6,3 +6,5 @@ nbformat
 cliffs_delta
 scipy
 jinja2
+seaborn
+matplotlib
