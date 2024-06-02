@@ -1,9 +1,9 @@
 # load packages
 library(dplyr)
 library(ggplot2)
-setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ4-project")
+setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ4-project/dont_touch_this_folder_jimmy")
 
-df <- read.csv("top200_sample.csv")
+df <- read.csv("top250_stats.csv")
 
 
 #collection date
@@ -12,20 +12,21 @@ date1 <- as.POSIXct("2024-05-28", tz = "UTC", format = "%Y-%m-%d")
 date2 <- as.POSIXct(df$creation_date, tz = "UTC", format = "%Y-%m-%d")
 # Calculate the difference in days
 df$days <- as.numeric(difftime(date1, date2, units = "days"))
+df$X <- NULL
+
 #View(df)
+df[, 4:14] <- (df[, 4:14] / df$days)
+df2 <- df
 
-df[, 5:15] <- (df[, 5:15] / df$days)
-
-
-gathered_df <- gather(df, attribute, count, -type, -tool_used, -link, -Commits,  -packages)
+gathered_df <- gather(df2, attribute, count, -type, -tool_used, -link, -creation_date, -days)
 gathered_df$link <- NULL
 gathered_df$tool_used <- NULL
+gathered_df$creation_date <- NULL
 
 df <- gathered_df
 df <- df %>%
   filter(attribute!="closedIssues") %>%
-  filter(attribute!="openIssues") %>%
-  filter(attribute!="Commits") 
+  filter(attribute!="openIssues") 
 
 plot <- ggplot(df, aes(x=reorder(attribute, -(as.numeric(count))), y=log(as.numeric(count)), fill=type)) + 
   geom_boxplot() +
@@ -40,7 +41,7 @@ plot <- ggplot(df, aes(x=reorder(attribute, -(as.numeric(count))), y=log(as.nume
 
 plot
 
-pdf(file = "top200_metrics.pdf",width = 4, height = 3.5)
+pdf(file = "../top250_metrics.pdf",width = 4, height = 3.5)
 plot
 dev.off()
 
@@ -58,6 +59,7 @@ df <- na.omit(df)
 class_spdx <- subset(df, identifier == "SPDX")
 class_cdx <- subset(df, identifier == "CycloneDX")
 # Perform paired Wilcoxon signed-rank test for each identifier
+p_values <- list()
 for (id in unique(df$attribute)) {
   cat("attribute:", id, "\n")
   
@@ -69,7 +71,8 @@ for (id in unique(df$attribute)) {
   #print(wilcox.test(id_data_A, id_data_B, paired = FALSE))
   
   mw_test <- wilcox.test(id_data_A, id_data_B, paired = FALSE)
-  cat("p-value:", mw_test$p.value, "\n")
+  #cat("p-value:", mw_test$p.value, "\n")
+  p_values[[id]] <- mw_test$p.value
   
   # Calculate Cliff's delta
   cliffs_delta <- function(x, y) {
@@ -83,10 +86,22 @@ for (id in unique(df$attribute)) {
   cat("\n")
 }
 
+# Convert p_values list to a vector
+p_values_vec <- unlist(p_values)
+
+# Adjust p-values using Bonferroni correction
+adjusted_p_values <- p.adjust(p_values_vec, method = "bonferroni")
+
+# Print adjusted p-values
+for (i in 1:length(adjusted_p_values)) {
+  cat("attribute:", names(adjusted_p_values)[i], "\n")
+  cat("adjusted p-value: ", adjusted_p_values[i], "\n")
+}
+
 mean(df$count)
 df3 <- df %>%
   group_by(identifier, attribute) %>%
-  summarise(mean=mean(as.numeric(count)),
-            median = median(as.numeric(count)))
+  summarise(mean=mean(as.numeric(count)/100),
+            median = median(as.numeric(count))/100)
 
 

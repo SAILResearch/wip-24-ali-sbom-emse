@@ -6,14 +6,14 @@ setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/R
 df <- read.csv("CycloneNSpdxTools.csv")
 df$X <- NULL
 #collection date
-date1 <- as.POSIXct("2024-05-28", tz = "UTC", format = "%Y-%m-%d")
+date1 <- as.POSIXct("2024-05-30", tz = "UTC", format = "%Y-%m-%d")
 #repo creation date
 date2 <- as.POSIXct(df$CreationDate, tz = "UTC", format = "%Y-%m-%d")
 # Calculate the difference in days
 df$days <- as.numeric(difftime(date1, date2, units = "days"))
 #View(df)
 
-df[, 6:14] <- (df[, 6:14] / df$days)*10000
+df[, 6:13] <- (df[, 6:13] / df$days)*10000
 
 gathered_df <- gather(df, attribute, count, -Format, -Tool, -Language, -Repo, -CreationDate, -Language, -days)
 
@@ -94,5 +94,5 @@ df3 <- df %>%
   group_by(identifier, attribute) %>%
   summarise(mean=mean(as.numeric(count)),
             median = median((count)))
-
+View(df3)
 
