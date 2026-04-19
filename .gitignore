@@ -6,4 +6,5 @@
 .vscode
 .claude
 .omc
+.env
 comments/
