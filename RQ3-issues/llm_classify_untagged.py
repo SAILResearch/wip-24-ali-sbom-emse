@@ -8,7 +8,7 @@ Uses OpenRouter API with a configurable model.
 
 Usage:
     python llm_classify_untagged.py
-    MODEL_ID=minimax/minimax-m2.7 python llm_classify_untagged.py
+    MODEL_ID=qwen/qwen3.6-flash python llm_classify_untagged.py
     DRY_RUN=1 python llm_classify_untagged.py   # prints first 3 prompts, exits
 
 Prerequisite:
@@ -29,7 +29,7 @@ ROOT_DIR = BASE_DIR.parent
 load_dotenv(ROOT_DIR / ".env", override=True)
 
 OPENROUTER_API_KEY = os.environ["OPENROUTER_API_KEY"]
-MODEL_ID           = os.environ.get("MODEL_ID", "minimax/minimax-m2.7") # qwen/qwen3.6-flash
+MODEL_ID           = os.environ.get("MODEL_ID", "qwen/qwen3.6-flash")
 MAX_RETRIES        = int(os.environ.get("MAX_RETRIES", "3"))
 RETRY_DELAY        = float(os.environ.get("RETRY_DELAY", "2.0"))
 MIN_YEAR           = int(os.environ.get("MIN_YEAR", "2018"))
@@ -291,19 +291,18 @@ def main():
         done_urls = set()
 
     results = []
-    total = len(all_untagged)
+    remaining = [r for _, r in all_untagged.iterrows() if str(r["issue_url"]) not in done_urls]
+    total_new = len(remaining)
+    print(f"  Issues left to label: {total_new}")
 
-    for i, (_, row) in enumerate(all_untagged.iterrows(), 1):
+    for new_i, row in enumerate(remaining, 1):
         url = str(row["issue_url"])
-        if url in done_urls:
-            continue
-
-        fmt   = str(row["format"])          # "spdx" or "cdx"
+        fmt   = str(row["format"])
         repo  = str(row.get("repo", ""))
         title = str(row.get("title", ""))
         body  = str(row.get("body", ""))
 
-        print(f"  [{i}/{total}] {fmt.upper()} | {title[:65]}")
+        print(f"  [{new_i}/{total_new}] {fmt.upper()} | {title[:65]}")
         try:
             result = classify_issue(title, body, url)
         except RuntimeError as e:
@@ -315,30 +314,27 @@ def main():
             print(f"           → SKIPPED (off-topic/spam, no categories)")
             done_urls.add(url)  # don't revisit on resume
             continue
-        print(f"           → {', '.join(cats)} ({result['confidence']})")
+        print(f"           → {', '.join(cats)}")
 
-        # One row per category (mirrors splitting_issues_in_tags.py explosion)
-        for cat in cats:
-            results.append({
-                "issue_url":    url,
-                "format":       fmt,
-                "repo":         repo,
-                "created_at":   row.get("created_at", ""),
-                "title":        title,
-                "llm_category": cat,
-                "model":        MODEL_ID,
-            })
+        results.append({
+            "issue_url":      url,
+            "format":         fmt,
+            "repo":           repo,
+            "created_at":     row.get("created_at", ""),
+            "title":          title,
+            "llm_categories": str(cats),
+            "model":          MODEL_ID,
+        })
 
         if len(results) % 100 == 0:
             _save(done, results)
-            print(f"  [checkpoint] {len(done) + len(results)} rows saved")
+            print(f"  [checkpoint] {len(done) + len(results)} issues saved")
 
         time.sleep(0.3)
 
     _save(done, results)
     final = pd.concat([done, pd.DataFrame(results)], ignore_index=True) if results else done
-    n_issues = final["issue_url"].nunique()
-    print(f"\nDone. {n_issues} issues → {len(final)} rows (exploded) → {OUT_FILE}")
+    print(f"\nDone. {len(final)} issues classified → {OUT_FILE}")
 
 
 def _save(done: pd.DataFrame, new_rows: list[dict]):
