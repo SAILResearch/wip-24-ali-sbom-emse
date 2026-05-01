@@ -1,0 +1,17 @@
+metric,category,value
+cohen_kappa,Bug Fixes and Defects,0.7542
+cohen_kappa,Code Components,0.1605
+cohen_kappa,Code Quality,0.5055
+cohen_kappa,Community Engagement and Support,0.6638
+cohen_kappa,Configuration,0.3944
+cohen_kappa,Continuous Integration and Deployment (CI/CD),0.522
+cohen_kappa,Documentation,0.5037
+cohen_kappa,Feature Development and Enhancement,0.789
+cohen_kappa,Integration and Interfacing,0.3986
+cohen_kappa,Libraries,0.0446
+cohen_kappa,Licensing,0.4446
+cohen_kappa,Release Management and Versioning,0.6814
+cohen_kappa,Technical Debt,0.1314
+cohen_kappa,User Interface and Outputs,0.4656
+cohen_kappa,MACRO_AVG,0.4614
+krippendorff_alpha,OVERALL,0.532

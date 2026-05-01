@@ -1,5 +1,7 @@
 pandas
 requests
+backoff
+python-dotenv
 plotly
 kaleido
 nbformat
@@ -9,3 +11,5 @@ jinja2
 seaborn
 matplotlib
 openpyxl
+krippendorff
+scikit-learn

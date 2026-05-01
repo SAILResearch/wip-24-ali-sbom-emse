@@ -36,11 +36,16 @@ RQ2-tools/                ← RQ2: tool ecosystem health
 
 RQ3-issues/               ← RQ3: GitHub issue analysis
   SpdxIssues.csv / CdxIssues.csv   raw issue reports
-  spdx_issues_with_tags.csv / cdx_issues_with_tags.csv   tagged issues
+  spdx_issues_with_tags.csv / cdx_issues_with_tags.csv   tagged issues (exploded: one row per tag)
   tags_sum.csv              49 CDX + 48 SPDX consolidated tags
   categories.csv / aggregatedCats.csv   14 issue categories
   issues_extraction.py / issues_extraction_chunks.py
-  splitting_issues_in_tags.py
+  splitting_issues_in_tags.py       explodes multi-tag issues into one row per tag
+  scrape_issue_content.py           fetches title+body for untagged issues (produces issues_with_content.csv)
+  llm_classify_untagged.py          multi-label LLM classification of untagged issues via OpenRouter
+                                    → output: llm_classified_issues_<model>.csv (exploded, one row per category)
+                                    → resume support: skips already-classified issue_urls
+                                    → checkpoint save every 100 rows
   issues.R / tags.R         statistical analysis + figures
   calctimediff.py           resolution-time computation
 
@@ -79,6 +84,16 @@ requirements.txt          ← Python dependencies
 | Inter-rater agreement metric | Krippendorff's Alpha (α = 0.72 initial, 0.85 final) |
 | Age normalization | all metrics divided by repository age in days |
 | 2018 cutoff rationale | CDX released May 2017; cutoff ensures comparable active period |
+
+---
+
+## In-Progress Work
+
+- **LLM multi-label classification of untagged issues** (2026-04-25)
+  - ~8,322 untagged issues (post-2018, fetch ok) being classified via `llm_classify_untagged.py`
+  - Multi-label: prompt asks for 1–3 categories; output exploded to one row per category (matches `spdx_issues_with_tags.csv` schema)
+  - Output: `RQ3-issues/llm_classified_issues_<model>.csv`
+  - Model: minimax/minimax-m2.5:free (via OpenRouter); resume-safe
 
 ---
 
