@@ -1,38 +1,29 @@
-,BUG IDs filtered which were trivial for 7B_Infill zero-shot,,,,,,,,,,,,,,,,
-,1,3,5,7,8,9,10,13,14,17,18,19,21,É,,,
-7b_infill_baseline,1,1,1,0,0,0,0,0,0,0,0,0,0,É,CONFUSION MATRIX - 1,,
-7b_infill_setting2,1,1,1,0,0,0,0,0,0,1,0,0,0,É,,,
-7b_infill_setting3,1,1,1,0,0,1,0,0,0,0,0,0,0,É,,,
-7b_infill_setting4,1,1,1,0,0,0,0,0,0,0,1,0,0,É,,,
-7b_infill_setting5,1,1,1,1,0,0,0,1,0,0,0,0,0,É,,,
-7b_infill_setting6,1,1,1,0,0,0,0,0,0,0,0,1,0,É,,,
-7b_infill_setting7,1,1,1,0,0,0,0,0,1,0,0,0,0,É,,,
-7b_infill_setting8,1,1,1,0,1,0,0,0,0,0,0,0,0,É,,,
-7b_instruct_baseline,1,1,1,0,0,0,0,0,0,0,0,0,0,É,CONFUSION MATRIX - 2,,
-7b_instruct_setting2,1,1,1,0,0,0,0,0,0,1,0,0,0,É,,,
-7b_instruct_setting3,1,1,1,0,0,1,0,0,0,0,0,0,0,É,,,
-7b_instruct_setting4,1,1,0,0,0,0,0,0,0,1,1,0,0,É,,,
-7b_instruct_setting5,1,0,1,1,0,0,0,1,0,0,0,0,0,É,,,
-7b_instruct_setting6,1,1,1,0,0,0,0,0,0,0,0,1,0,É,,,
-7b_instruct_setting7,0,1,1,0,0,0,0,0,1,0,0,0,0,É,,,
-7b_instruct_setting8,1,1,1,0,1,0,0,0,0,0,0,0,0,É,,,
-,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,
-,BUG IDs filtered which were trivial for 13B_Infill zero-shot,,,,,,,,,,,,,,,,
-,5,10,11,12,15,16,17,19,21,22,23,31,36,É,,,
-13b_infill_baseline,1,1,1,0,0,0,0,0,0,0,0,0,0,É,CONFUSION MATRIX - 3,,
-13b_infill_setting2,1,1,1,0,0,0,0,0,0,1,0,0,0,É,,,
-13b_infill_setting3,1,1,1,0,0,1,0,0,0,0,0,0,0,É,,,
-13b_infill_setting4,1,1,1,0,0,0,0,0,0,0,1,0,0,É,,,
-13b_infill_setting5,1,1,1,1,0,0,0,1,0,0,0,0,0,É,,,
-13b_infill_setting6,1,1,1,0,0,0,0,0,0,0,0,1,0,É,,,
-13b_infill_setting7,1,1,1,0,0,0,0,0,1,0,0,0,0,É,,,
-13b_infill_setting8,1,1,1,0,1,0,0,0,0,0,0,0,0,É,,,
-13b_instruct_baseline,1,1,1,0,0,0,0,0,0,0,0,0,0,É,CONFUSION MATRIX - 4,,
-13b_instruct_setting2,1,1,1,0,0,0,0,0,0,1,0,0,0,É,,,
-13b_instruct_setting3,1,1,1,0,0,1,0,0,0,0,0,0,0,É,,,
-13b_instruct_setting4,1,1,0,0,0,0,0,0,0,1,1,0,0,É,,,
-13b_instruct_setting5,1,0,1,1,0,0,0,1,0,0,0,0,0,É,,,
-13b_instruct_setting6,1,1,1,0,0,0,0,0,0,0,0,1,0,É,,,
-13b_instruct_setting7,0,1,1,0,0,0,0,0,1,0,0,0,0,É,,,
-13b_instruct_setting8,1,1,1,0,1,0,0,0,0,0,0,0,0,É,,,
+"","category","identifier","avg_Resolution_Time","total"
+"1","Bug Fixes and Defects","CycloneDX",7279272.08841463,7279272.08841463
+"2","Bug Fixes and Defects","SPDX",19947664.7944664,19947664.7944664
+"3","Code Components","CycloneDX",14581271.1360544,14581271.1360544
+"4","Code Components","SPDX",18807765.6079447,18807765.6079447
+"5","Code Quality","CycloneDX",15919824.4280105,15919824.4280105
+"6","Code Quality","SPDX",9041072.975,9041072.975
+"7","Community Engagement and Support","CycloneDX",14994027.2709677,14994027.2709677
+"8","Community Engagement and Support","SPDX",19145304.2126697,19145304.2126697
+"9","Configuration","CycloneDX",16233347.7088123,16233347.7088123
+"10","Configuration","SPDX",22035935.6582278,22035935.6582278
+"11","Continuous Integration and Deployment (CI/CD)","CycloneDX",3464611.39393939,3464611.39393939
+"12","Continuous Integration and Deployment (CI/CD)","SPDX",4015761.79365079,4015761.79365079
+"13","Documentation","CycloneDX",9437863.26570048,9437863.26570048
+"14","Documentation","SPDX",13750408.8943396,13750408.8943396
+"15","Feature Development and Enhancement","CycloneDX",11368178.118027,11368178.118027
+"16","Feature Development and Enhancement","SPDX",19713843.2051959,19713843.2051959
+"17","Integration and Interfacing","CycloneDX",21127548.8642857,21127548.8642857
+"18","Integration and Interfacing","SPDX",30956476.5714286,30956476.5714286
+"19","Libraries","CycloneDX",16827623.2307692,16827623.2307692
+"20","Libraries","SPDX",6637644,6637644
+"21","Licensing","CycloneDX",25051158.9423077,25051158.9423077
+"22","Licensing","SPDX",12060878.9849537,12060878.9849537
+"23","Release Management and Versioning","CycloneDX",10713487.295977,10713487.295977
+"24","Release Management and Versioning","SPDX",9981119.08888889,9981119.08888889
+"25","Technical Debt","CycloneDX",13900207.3559322,13900207.3559322
+"26","Technical Debt","SPDX",10411135.952381,10411135.952381
+"27","User Interface and Outputs","CycloneDX",12018509.9674267,12018509.9674267
+"28","User Interface and Outputs","SPDX",19766598.7352941,19766598.7352941

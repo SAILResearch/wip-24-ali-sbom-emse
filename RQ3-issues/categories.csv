@@ -96,3 +96,29 @@ Code Components,package-formats,SPDX
 Release Management and Versioning,breaking change,SPDX
 User Interface and Outputs,GUI and outputs,SPDX
 Technical Debt,technical-debt,SPDX
+Bug Fixes and Defects,Bug Fixes and Defects,CycloneDX
+Bug Fixes and Defects,Bug Fixes and Defects,SPDX
+Code Components,Code Components,CycloneDX
+Code Components,Code Components,SPDX
+Code Quality,Code Quality,CycloneDX
+Code Quality,Code Quality,SPDX
+Community Engagement and Support,Community Engagement and Support,CycloneDX
+Community Engagement and Support,Community Engagement and Support,SPDX
+Configuration,Configuration,CycloneDX
+Configuration,Configuration,SPDX
+Continuous Integration and Deployment (CI/CD),Continuous Integration and Deployment (CI/CD),CycloneDX
+Continuous Integration and Deployment (CI/CD),Continuous Integration and Deployment (CI/CD),SPDX
+Feature Development and Enhancement,Feature Development and Enhancement,CycloneDX
+Feature Development and Enhancement,Feature Development and Enhancement,SPDX
+Integration and Interfacing,Integration and Interfacing,CycloneDX
+Integration and Interfacing,Integration and Interfacing,SPDX
+Libraries,Libraries,CycloneDX
+Libraries,Libraries,SPDX
+Licensing,Licensing,CycloneDX
+Licensing,Licensing,SPDX
+Release Management and Versioning,Release Management and Versioning,CycloneDX
+Release Management and Versioning,Release Management and Versioning,SPDX
+Technical Debt,Technical Debt,CycloneDX
+Technical Debt,Technical Debt,SPDX
+User Interface and Outputs,User Interface and Outputs,CycloneDX
+User Interface and Outputs,User Interface and Outputs,SPDX

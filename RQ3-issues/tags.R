@@ -2,7 +2,12 @@
 
 
 # For extracted issue tags:
-setwd("/Users/abdulalib/Desktop/Postdoc/Academic/SBOMsWork/replication-package/RQ3-issues")
+.libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
+library(dplyr)
+library(ggplot2)
+setwd("RQ3-issues")
+View <- function(...) invisible(NULL)
+
 cdx_issues = read.csv("cdx_issues_with_tags.csv")
 spdx_issues = read.csv("spdx_issues_with_tags.csv")
 
@@ -15,13 +20,13 @@ spdx_issues$year <- format(spdx_issues$year, "%Y")
 View(cdx_issues)
 
 cdx_issues <- cdx_issues %>%
-  filter(cdx_issues$year>=2018) 
+  filter(cdx_issues$year>=2018)
 View(cdx_issues)
 
 spdx_issues <- spdx_issues %>%
-  filter(spdx_issues$year>=2018) 
+  filter(spdx_issues$year>=2018)
 View(spdx_issues)
- 
+
 # Add identifier column to df1 and df2
 df1 <- mutate(cdx_issues, identifier = "CycloneDX")
 df2 <- mutate(spdx_issues, identifier = "SPDX")
@@ -34,29 +39,29 @@ write.csv(df,file="tags.csv")
 View(cdx_issues)
 View(spdx_issues)
 
-cdx_repos <- cdx_issues %>% 
-  group_by(Repo) %>% 
+cdx_repos <- cdx_issues %>%
+  group_by(Repo) %>%
   summarise(n = n())
 View(cdx_repos)
 
-spdx_repos <- spdx_issues %>% 
-  group_by(Repo) %>% 
+spdx_repos <- spdx_issues %>%
+  group_by(Repo) %>%
   summarise(n = n())
 View(spdx_repos)
 
-cdx_tags <- cdx_issues %>% 
-  group_by(Tags) %>% 
+cdx_tags <- cdx_issues %>%
+  group_by(Tags) %>%
   summarise(n = n())
 View(cdx_tags)
 
-spdx_tags <- spdx_issues %>% 
-  group_by(Tags) %>% 
+spdx_tags <- spdx_issues %>%
+  group_by(Tags) %>%
   summarise(n = n())
 View(spdx_tags)
 
 
-tags <- df %>% 
-  group_by(Tags,identifier) %>% 
+tags <- df %>%
+  group_by(Tags,identifier) %>%
   summarise(n = n())
 View(tags)
 write.csv(tags,"tags_sum.csv")
@@ -67,37 +72,28 @@ summary(spdx_tags$n)
 cats <- read.csv("categories.csv")
 View(cats)
 
-
-df2 <- merge(df, cats[c('Tags', 'identifier', 'category')], by = c('Tags', 'identifier'), all.x = TRUE) %>% 
+df2 <- merge(df, cats[c('Tags', 'identifier', 'category')], by = c('Tags', 'identifier'), all.x = TRUE) %>%
         filter(!is.na(category))
-
-# spdx <- df2 %>% 
-#   filter(identifier == "CycloneDX")
-# View(spdx)
-# unique(spdx$Repo)
-# 
-# test <- df2 %>% 
-#   group_by(df2$category,df2$identifier,df2$Repo) %>% 
-#   summarise(n = n())
-# View(test)
-
 
 View(df2)
 
 # Tags prevalence calculation
-t <- df2 %>% 
-  group_by(identifier) %>% 
+t <- df2 %>%
+  group_by(identifier) %>%
   summarise(n = n())
 View(t)
 
-categories <- df2 %>% 
-  group_by(category,identifier) %>% 
+total_cdx  <- t$n[t$identifier == "CycloneDX"]
+total_spdx <- t$n[t$identifier == "SPDX"]
+
+categories <- df2 %>%
+  group_by(category,identifier) %>%
   summarise(n = n())
 
 categories <- categories %>%
   mutate(total = case_when(
-    identifier == "SPDX" ~ 9027,
-    identifier == "CycloneDX" ~ 16323
+    identifier == "SPDX" ~ total_spdx,
+    identifier == "CycloneDX" ~ total_cdx
   ))
 
 View(categories)
@@ -119,13 +115,12 @@ plot <- ggplot(categories, aes(x=reorder(categories$category,categories$percenta
   #scale_y_continuous(limits=c(0,100)) +
   coord_flip()
 
-plot
 pdf(file = "tags_prevalence.pdf",width = 8, height = 3.5)
 plot
 dev.off()
 
-df3 <- df2 %>% 
-  group_by(category,identifier) %>% 
+df3 <- df2 %>%
+  group_by(category,identifier) %>%
   summarise(n = n())
 View(df3)
 
@@ -142,22 +137,22 @@ adjusted_alpha <- alpha / num_comparisons
 wilcox.test(df_cyclone$n, df_spdx$n, conf.level = 1 - adjusted_alpha)
 
 
-df2 %>% 
-  filter((State == "closed")) %>% 
+df2 %>%
+  filter((State == "closed")) %>%
   rstatix::wilcox_test(resolve_time_sec ~ identifier,p.adjust.method = "bonferroni")
 
-df2 %>% 
-  filter((State == "closed")) %>% 
+df2 %>%
+  filter((State == "closed")) %>%
   rstatix::wilcox_effsize(resolve_time_sec ~ identifier,p.adjust.method = "bonferroni")
 
 res.aov <- aov(resolve_time_sec ~ identifier, data = df2)
 summary(res.aov)
 
-df2 %>% 
-  filter((State == "closed")) %>% 
+df2 %>%
+  filter((State == "closed")) %>%
   rstatix::wilcox_test(resolve_time_sec ~ category,p.adjust.method = "bonferroni")
 
-t <- df2 %>% 
+t <- df2 %>%
   filter((State == "closed"))
 
 df5 <- data.frame(identifier=t$identifier,
@@ -176,11 +171,11 @@ cliffs_delta <- function(x, y) {
 # Perform paired Wilcoxon signed-rank test for each identifier
 for (id in unique(df5$category)) {
   cat("category:", id, "\n")
-  
+
   # Subset data for the current identifier
   id_data_A <- subset(class_spdx, category == id)$time
   id_data_B <- subset(class_cdx, category == id)$time
-  
+
   # Perform Wilcoxon signed-rank test
   print(wilcox.test(id_data_A, id_data_B, paired = FALSE))
   #cohen_d <- cohen.d(id_data_A, id_data_B, paired = FALSE)
@@ -188,9 +183,6 @@ for (id in unique(df5$category)) {
   print(delta)
   cat("\n")
 }
-
-
-
 
 
 # ggplot(categories, aes(x = as.character(category), y = percentage)) +
@@ -206,13 +198,13 @@ for (id in unique(df5$category)) {
 #   facet_wrap(~ identifier, scales = "free")
 
 # Resolution time claculation
-t1 <- df2 %>% 
-  group_by(category,identifier) %>% 
+t1 <- df2 %>%
+  group_by(category,identifier) %>%
   filter((State == "closed")) %>%
   summarise(avg_Resolution_Time = mean(resolve_time_sec, na.rm = TRUE))
 
-mean_time <- t1 %>% 
-  group_by(identifier) %>% 
+mean_time <- t1 %>%
+  group_by(identifier) %>%
   summarise(total_time = sum(avg_Resolution_Time, na.rm = TRUE))
 View(mean_time)
 
@@ -224,58 +216,32 @@ t1 <- t1 %>%
 
 t1$total <- t1$avg_Resolution_Time
 
-#write.csv(t1, file = "aggregatedTagTime.csv")
+write.csv(t1, file = "aggregatedTagTime.csv")
 t1 = read.csv("aggregatedTagTime.csv")
-plot <- ggplot(t1, aes(x=reorder(category,order),y=(avg_Resolution_Time))) +
+plot <- ggplot(t1, aes(x=reorder(category,avg_Resolution_Time),y=(avg_Resolution_Time))) +
   geom_bar(aes(fill = identifier), position = "dodge", stat="identity") +
   ylab("Resolution Time (sec)") +
   xlab("Issue Categories") +
   labs(fill="Type of Tool") +
   theme(legend.position = c(0.92, 0.85), legend.direction = "vertical") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  geom_text(size=2.5, position = position_dodge(1), aes(y=avg_Resolution_Time + max(avg_Resolution_Time, na.rm=TRUE)*0.01, fill = identifier, label=formatC(avg_Resolution_Time, format="e", digits=1), hjust=0.08, vjust=0.3)) +
   #scale_y_continuous(limits=c(0,100)) +
-  scale_fill_manual(values=c("#999999", "#E69F00"))
+  scale_fill_manual(values=c("#999999", "#E69F00")) +
+  coord_flip()
 
 
 pdf(file = "tag_resolve_time.pdf",width = 9, height = 5)
 plot
 dev.off()
 
-df2 %>% 
-  filter((State == "closed")) %>% 
+df2 %>%
+  filter((State == "closed")) %>%
   rstatix::wilcox_test(resolve_time_sec ~ identifier,p.adjust.method = "bonferroni")
 
-df2 %>% 
-  filter((State == "closed")) %>% 
+df2 %>%
+  filter((State == "closed")) %>%
   rstatix::wilcox_effsize(resolve_time_sec ~ identifier,p.adjust.method = "bonferroni")
 
 res.aov <- aov(resolve_time_sec ~ identifier, data = df2)
 summary(res.aov)
-
-
-##############################################################################
-##############################################################################
-##############################################################################
-##############################################################################
-# Subset the data for SPDX and CycloneDx types
-df3 <- df2%>% 
-  filter((State == "closed"))
-spdx_data <- df3[df3$identifier == "SPDX", "resolve_time_sec"]
-cyclonedx_data <- df3[df3$identifier == "CDX", "resolve_time_sec"]
-
-num_groups <- 2
-num_comparisons <- num_groups * (num_groups - 1) / 2
-alpha <- 0.05
-adjusted_alpha <- alpha / num_comparisons
-
-# Perform Mann-Whitney U test
-mwu_test <- wilcox.test(spdx_data, cyclonedx_data, conf.level = 1 - adjusted_alpha)
-# Calculate Cliff's delta
-cliffs_delta <- function(x, y) {
-  n1 <- sum(!is.na(x))
-  n2 <- sum(!is.na(y))
-  sum(ifelse(outer(x, y, "<"), 1, 0)) / (n1 * n2)
-}
-delta <- cliffs_delta(spdx_data, cyclonedx_data)
-cat("cliff's delta:", delta, "\n")
-cat("\n")
