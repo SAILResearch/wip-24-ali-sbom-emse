@@ -5,7 +5,7 @@ Merges LLM-classified untagged issues into the existing tagged-issues files:
   cdx_issues_with_tags.csv  (augmented in-place)
   spdx_issues_with_tags.csv (augmented in-place)
 
-For issues in sample_issues.csv, human_categories overrides qwen's llm_categories.
+For issues in sample_issues.csv, human_categories overrides devstral_categories.
 
 LLM rows are appended with Tags = category name (already in category-space).
 categories.csv is extended with pass-through mappings so tags.R works unchanged.
@@ -52,7 +52,7 @@ def parse_cats(val) -> list[str]:
 # ---------------------------------------------------------------------------
 # 1. Load inputs
 # ---------------------------------------------------------------------------
-df_qwen   = pd.read_csv(BASE / "llm_classified_issues_qwen_qwen3.6-flash.csv")
+df_llm   = pd.read_csv(BASE / "llm_classified_issues_devstral-small-2.csv")
 df_sample = pd.read_csv(BASE / "sample_issues.csv")
 df_cdx    = pd.read_csv(BASE / "cdx_issues_with_tags.csv")
 df_spdx   = pd.read_csv(BASE / "spdx_issues_with_tags.csv")
@@ -65,7 +65,7 @@ human_override = {
     if parse_cats(row["human_categories"])
 }
 
-print(f"Qwen rows: {len(df_qwen)}, unique issues: {df_qwen['issue_url'].nunique()}")
+print(f"Devstral rows: {len(df_llm)}, unique issues: {df_llm['issue_url'].nunique()}")
 print(f"Human overrides: {len(human_override)}")
 
 # ---------------------------------------------------------------------------
@@ -73,9 +73,9 @@ print(f"Human overrides: {len(human_override)}")
 # ---------------------------------------------------------------------------
 # Issue URL, State, Created At, Closed At, Tags, Repo, resolve_time_sec
 llm_rows = []
-for _, row in df_qwen.iterrows():
+for _, row in df_llm.iterrows():
     url  = row["issue_url"]
-    cats = human_override.get(url) or parse_cats(row["llm_categories"])
+    cats = human_override.get(url) or parse_cats(row["devstral_categories"])
     for cat in cats:
         llm_rows.append({
             "Issue URL":        url,

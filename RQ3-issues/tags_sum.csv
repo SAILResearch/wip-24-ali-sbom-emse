@@ -5,31 +5,31 @@
 "4","API Call","CycloneDX",28
 "5","Acceptance Notification Sent","SPDX",2
 "6","Beginner","SPDX",2
-"7","Bug Fixes and Defects","CycloneDX",1150
-"8","Bug Fixes and Defects","SPDX",1000
+"7","Bug Fixes and Defects","CycloneDX",6294
+"8","Bug Fixes and Defects","SPDX",4296
 "9","CI","CycloneDX",36
 "10","CI","SPDX",27
 "11","CI/CD","CycloneDX",18
 "12","CI/CD","SPDX",36
 "13","CT","CycloneDX",8
 "14","CT","SPDX",6
-"15","Code Components","CycloneDX",384
-"16","Code Components","SPDX",361
-"17","Code Quality","CycloneDX",143
-"18","Code Quality","SPDX",214
-"19","Community Engagement and Support","CycloneDX",151
-"20","Community Engagement and Support","SPDX",170
-"21","Configuration","CycloneDX",376
-"22","Configuration","SPDX",283
+"15","Code Components","CycloneDX",2876
+"16","Code Components","SPDX",2942
+"17","Code Quality","CycloneDX",1004
+"18","Code Quality","SPDX",834
+"19","Community Engagement and Support","CycloneDX",453
+"20","Community Engagement and Support","SPDX",604
+"21","Configuration","CycloneDX",1754
+"22","Configuration","SPDX",1316
 "23","Consider Funding","CycloneDX",22
-"24","Continuous Integration and Deployment (CI/CD)","CycloneDX",103
-"25","Continuous Integration and Deployment (CI/CD)","SPDX",118
-"26","Documentation","CycloneDX",191
-"27","Documentation","SPDX",325
+"24","Continuous Integration and Deployment (CI/CD)","CycloneDX",375
+"25","Continuous Integration and Deployment (CI/CD)","SPDX",382
+"26","Documentation","CycloneDX",537
+"27","Documentation","SPDX",945
 "28","Done","SPDX",18
 "29","FP/FN report","CycloneDX",41
-"30","Feature Development and Enhancement","CycloneDX",912
-"31","Feature Development and Enhancement","SPDX",802
+"30","Feature Development and Enhancement","CycloneDX",4728
+"31","Feature Development and Enhancement","SPDX",4037
 "32","Feature Request","SPDX",18
 "33","GH Open Source Day","CycloneDX",11
 "34","GH Open Source Day","SPDX",22
@@ -45,14 +45,14 @@
 "44","ISO conformance","SPDX",28
 "45","ISO publication","SPDX",15
 "46","IaC violation","SPDX",3
-"47","Integration and Interfacing","CycloneDX",260
-"48","Integration and Interfacing","SPDX",103
+"47","Integration and Interfacing","CycloneDX",1400
+"48","Integration and Interfacing","SPDX",1060
 "49","JMESPath","CycloneDX",84
 "50","LFX mentorship project","CycloneDX",32
-"51","Libraries","CycloneDX",39
-"52","Libraries","SPDX",69
-"53","Licensing","CycloneDX",117
-"54","Licensing","SPDX",371
+"51","Libraries","CycloneDX",99
+"52","Libraries","SPDX",125
+"53","Licensing","CycloneDX",222
+"54","Licensing","SPDX",1634
 "55","Mend: dependency security vulnerability","SPDX",1
 "56","New-UI","SPDX",4
 "57","OSI related","SPDX",3
@@ -92,8 +92,8 @@
 "91","RFC vote accepted","CycloneDX",27
 "92","RFC vote accepted","SPDX",27
 "93","Rejected","CycloneDX",4
-"94","Release Management and Versioning","CycloneDX",81
-"95","Release Management and Versioning","SPDX",107
+"94","Release Management and Versioning","CycloneDX",226
+"95","Release Management and Versioning","SPDX",265
 "96","Required for Release","SPDX",2
 "97","SCS","SPDX",1
 "98","SPDX v2.1","SPDX",6
@@ -107,8 +107,8 @@
 "106","Status: On Hold","SPDX",4
 "107","Submit New License","SPDX",64
 "108","TLN-registration","CycloneDX",6
-"109","Technical Debt","CycloneDX",19
-"110","Technical Debt","SPDX",45
+"109","Technical Debt","CycloneDX",219
+"110","Technical Debt","SPDX",242
 "111","Type: Bug","SPDX",11
 "112","Type: CI","SPDX",34
 "113","Type: Documentation","SPDX",5
@@ -116,8 +116,8 @@
 "115","Type: Maintenance","SPDX",13
 "116","Type: Test","SPDX",10
 "117","Unresolved","SPDX",29
-"118","User Interface and Outputs","CycloneDX",197
-"119","User Interface and Outputs","SPDX",279
+"118","User Interface and Outputs","CycloneDX",1285
+"119","User Interface and Outputs","SPDX",1276
 "120","VAP","CycloneDX",14
 "121","ValidationError","CycloneDX",2
 "122","ValidationError","SPDX",1

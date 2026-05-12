@@ -1,29 +1,29 @@
 "","category","identifier","n","total","percentage"
-"1","Bug Fixes and Defects","CycloneDX",8545,20396,41.8954696999412
-"2","Bug Fixes and Defects","SPDX",1381,12949,10.6649162097459
-"3","Code Components","CycloneDX",688,20396,3.37321043341832
-"4","Code Components","SPDX",2308,12949,17.8237701753031
-"5","Code Quality","CycloneDX",1205,20396,5.90802118062365
-"6","Code Quality","SPDX",323,12949,2.49440111205499
-"7","Community Engagement and Support","CycloneDX",455,20396,2.23082957442636
-"8","Community Engagement and Support","SPDX",537,12949,4.14703838134219
-"9","Configuration","CycloneDX",665,20396,3.2604432241616
-"10","Configuration","SPDX",783,12949,6.04679898061626
-"11","Continuous Integration and Deployment (CI/CD)","CycloneDX",139,20396,0.681506177681898
-"12","Continuous Integration and Deployment (CI/CD)","SPDX",188,12949,1.45184956367287
-"13","Documentation","CycloneDX",443,20396,2.1719945087272
-"14","Documentation","SPDX",460,12949,3.55239786856128
-"15","Feature Development and Enhancement","CycloneDX",6054,20396,29.6822906452246
-"16","Feature Development and Enhancement","SPDX",4694,12949,36.2499034674492
-"17","Integration and Interfacing","CycloneDX",454,20396,2.22592665228476
-"18","Integration and Interfacing","SPDX",135,12949,1.04255154838211
-"19","Libraries","CycloneDX",112,20396,0.549127279858796
-"20","Libraries","SPDX",103,12949,0.795428218395243
-"21","Licensing","CycloneDX",212,20396,1.03941949401843
-"22","Licensing","SPDX",1390,12949,10.7344196463047
-"23","Release Management and Versioning","CycloneDX",460,20396,2.25534418513434
-"24","Release Management and Versioning","SPDX",157,12949,1.21244883774809
-"25","Technical Debt","CycloneDX",82,20396,0.402039615610904
-"26","Technical Debt","SPDX",113,12949,0.87265425901614
-"27","User Interface and Outputs","CycloneDX",882,20396,4.32437732888802
-"28","User Interface and Outputs","SPDX",377,12949,2.91142173140783
+"1","Bug Fixes and Defects","CycloneDX",13689,37745,36.2670552391045
+"2","Bug Fixes and Defects","SPDX",4677,28040,16.6797432239658
+"3","Code Components","CycloneDX",3180,37745,8.42495694794012
+"4","Code Components","SPDX",4889,28040,17.4358059914408
+"5","Code Quality","CycloneDX",2066,37745,5.47357265863028
+"6","Code Quality","SPDX",943,28040,3.36305278174037
+"7","Community Engagement and Support","CycloneDX",757,37745,2.00556365081468
+"8","Community Engagement and Support","SPDX",971,28040,3.46291012838802
+"9","Configuration","CycloneDX",2043,37745,5.41263743542191
+"10","Configuration","SPDX",1816,28040,6.47646219686163
+"11","Continuous Integration and Deployment (CI/CD)","CycloneDX",411,37745,1.0888859451583
+"12","Continuous Integration and Deployment (CI/CD)","SPDX",452,28040,1.61198288159772
+"13","Documentation","CycloneDX",789,37745,2.09034309180024
+"14","Documentation","SPDX",460,28040,1.64051355206847
+"15","Feature Development and Enhancement","CycloneDX",9870,37745,26.149158828984
+"16","Feature Development and Enhancement","SPDX",7929,28040,28.2774607703281
+"17","Integration and Interfacing","CycloneDX",1594,37745,4.22307590409326
+"18","Integration and Interfacing","SPDX",1092,28040,3.8944365192582
+"19","Libraries","CycloneDX",172,37745,0.45568949529739
+"20","Libraries","SPDX",159,28040,0.567047075606277
+"21","Licensing","CycloneDX",317,37745,0.839846337263214
+"22","Licensing","SPDX",2653,28040,9.46148359486448
+"23","Release Management and Versioning","CycloneDX",605,37745,1.60286130613326
+"24","Release Management and Versioning","SPDX",315,28040,1.12339514978602
+"25","Technical Debt","CycloneDX",282,37745,0.747118823685256
+"26","Technical Debt","SPDX",310,28040,1.1055634807418
+"27","User Interface and Outputs","CycloneDX",1970,37745,5.2192343356736
+"28","User Interface and Outputs","SPDX",1374,28040,4.90014265335235

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-LLM classification of untagged GitHub issues using our 14-category tag taxonomy.
+LLM classification of ALL GitHub issues using our 14-category tag taxonomy.
 
 Reads from issues_with_content.csv (produced by scrape_issue_content.py).
-Targets only rows where tags == [] and fetch_status == ok.
-Uses OpenRouter API with a configurable model.
+Targets ALL rows where fetch_status == ok (both tagged and untagged issues).
+Uses a local vLLM endpoint by default, or OpenRouter as fallback.
 
 Usage:
     python llm_classify_untagged.py
-    MODEL_ID=qwen/qwen3.6-flash python llm_classify_untagged.py
+    VLLM_BASE_URL=http://localhost:8001/v1 python llm_classify_untagged.py
     DRY_RUN=1 python llm_classify_untagged.py   # prints first 3 prompts, exits
 
 Prerequisite:
@@ -28,8 +28,11 @@ ROOT_DIR = BASE_DIR.parent
 
 load_dotenv(ROOT_DIR / ".env", override=True)
 
-OPENROUTER_API_KEY = os.environ["OPENROUTER_API_KEY"]
-MODEL_ID           = os.environ.get("MODEL_ID", "qwen/qwen3.6-flash")
+# Local vLLM endpoint; falls back to OpenRouter if not set
+VLLM_BASE_URL      = os.environ.get("VLLM_BASE_URL", "http://elmyra.cs.queensu.ca/v1")
+MODEL_ID           = os.environ.get("MODEL_ID", "devstral-small-2")
+# OpenRouter key only needed when not using local vLLM
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 MAX_RETRIES        = int(os.environ.get("MAX_RETRIES", "3"))
 RETRY_DELAY        = float(os.environ.get("RETRY_DELAY", "2.0"))
 MIN_YEAR           = int(os.environ.get("MIN_YEAR", "2018"))
@@ -57,11 +60,11 @@ CATEGORIES = [
 
 CATEGORY_DESCRIPTIONS = {
     "Bug Fixes and Defects":
-        "Issues reporting incorrect behavior, crashes, false positives/negatives, regressions, or test failures.",
+        "Issues reporting incorrect behavior, crashes, false positives/negatives, regressions, test failures, or stale/inactive issues awaiting resolution.",
     "Code Quality":
-        "Refactoring, validation improvements, performance, code style, linting, and non-functional code improvements.",
+        "Refactoring, performance improvements, code style, linting, non-functional code improvements, and improvements to how the tool generates or processes package formats (e.g., improving output quality or generation logic — not implementing a new scanner or parser). Also includes internal maintenance items marked to be excluded from changelogs.",
     "Community Engagement and Support":
-        "Help-wanted requests, questions from users, community discussions, mentorship (GSoC/LFX), upstream coordination.",
+        "User questions, help-wanted requests, community discussions, mentorship (GSoC/LFX), upstream coordination. Use this for any issue that is primarily a question or support request from an end user.",
     "Configuration":
         "Installation, packaging, Docker, Helm, dependency management, environment setup.",
     "Continuous Integration and Deployment (CI/CD)":
@@ -69,21 +72,21 @@ CATEGORY_DESCRIPTIONS = {
     "Documentation":
         "Missing, incorrect, or improved documentation, API docs, examples, READMEs.",
     "Feature Development and Enhancement":
-        "New features, enhancements, proposals, must-have / nice-to-have improvements.",
+        "New features, enhancements, proposals, must-have / nice-to-have improvements. Also includes security-related enhancement requests (e.g., adding vulnerability scanning, SBOM security profiles, supply-chain risk features — not bug reports that happen to have security implications). This is the broadest category — use it for any improvement or enhancement request that does not belong to a more specific category (Licensing, CI/CD, Documentation, Configuration, etc.).",
     "Integration and Interfacing":
-        "Support for specific ecosystems (Java, JS, Go, Python, OS), webhooks, plugin integrations, OS support.",
+        "Support for specific language ecosystems (Java, JS, Go, Python, Ruby, Rust), OS support, webhooks, plugin integrations.",
     "Libraries":
-        "Core library / API issues, spdx-utils, internal library components.",
+        "Issues about the public API surface or library-level contracts of core SPDX/CDX libraries (e.g., method signatures, API stability, library-level bugs in spdx-utils). Use Code Components for issues about what those libraries parse, scan, or represent.",
     "Licensing":
-        "License detection, copyright scanning, license review, new license submissions, SPDX license list.",
+        "License detection, copyright scanning, license review, new license submissions, SPDX license list updates.",
     "Code Components":
-        "Package scanning, serialization, data model, parsers, analyzers, scanners, I/O, package formats.",
+        "Implementing or fixing parsers, analyzers, scanners, serialization, data model, I/O, and package format support — as opposed to improving their output quality (which belongs in Code Quality).",
     "Release Management and Versioning":
-        "Breaking changes, release planning, versioning, changelogs, pending releases.",
+        "Breaking changes, release planning, versioning, changelogs, pending releases. Does NOT include internal housekeeping items simply excluded from changelog entries.",
     "User Interface and Outputs":
-        "GUI, CLI output, end-user-facing behavior, report formats.",
+        "GUI, CLI output, end-user-facing behavior, report formats. Issues about the CLI as an interface (not CLI as an ecosystem integration target) belong here.",
     "Technical Debt":
-        "Technical debt cleanup, refactoring debt, long-term maintenance work explicitly labeled as debt.",
+        "Technical debt cleanup, refactoring debt, long-term maintenance work. Does not need to be explicitly labeled — infer from issue content discussing cleanup of legacy code, accumulated shortcuts, or deferred maintenance.",
 }
 
 CATEGORY_LIST_STR = "\n".join(f"  {i+1:2d}. {c}" for i, c in enumerate(CATEGORIES))
@@ -98,20 +101,20 @@ Category descriptions:
 {chr(10).join(f'  - {c}: {d}' for c, d in CATEGORY_DESCRIPTIONS.items())}
 
 Rules:
-- Only assign categories you are HIGHLY CONFIDENT apply. If you are not certain, do not include the category.
-- If no category fits with high confidence, return an empty list — do NOT force a category.
-- Most issues warrant 1 category; a clearly multi-topic issue may warrant 2-3.
+- Always assign the best-fitting category even if the match is imperfect. Only return an empty list if the issue is completely off-topic (e.g., spam, test issue, unrelated to software development).
+- Most issues warrant 1 category. A clearly multi-topic issue may warrant 2–3; do not force secondary categories if they are a stretch.
+- Prefer specificity: if an issue matches both a general category (Bug Fixes) and a specific one (Technical Debt or Licensing), include both.
 - Respond with ONLY a JSON object: {{"categories": ["<exact category name>", ...], "reasoning": "<one sentence>"}}
-- Do not include a confidence field — all returned categories are implicitly high-confidence.
 - Do not add any text outside the JSON object.
 """
 
-# ── Load untagged issues from content cache ──────────────────────────────────
+# ── Load all issues from content cache ──────────────────────────────────────
 
-def load_untagged() -> pd.DataFrame:
+def load_all_issues() -> pd.DataFrame:
     """
     Read issues_with_content.csv (from scrape_issue_content.py).
-    Filters to: fetch_status==ok, year>=MIN_YEAR, tags empty.
+    Filters to: fetch_status==ok, year>=MIN_YEAR.
+    Includes both tagged and untagged issues.
     """
     if not CONTENT_FILE.exists():
         raise FileNotFoundError(
@@ -128,23 +131,18 @@ def load_untagged() -> pd.DataFrame:
     # Only successfully fetched rows
     df = df[df["fetch_status"] == "ok"].copy()
 
-    # Empty-tag filter
-    def is_untagged(val):
-        if pd.isna(val):
-            return True
-        return str(val).strip() in ("[]", "", "nan")
-
-    df = df[df["tags"].apply(is_untagged)].copy()
-
     spdx_n = (df["format"] == "spdx").sum()
     cdx_n  = (df["format"] == "cdx").sum()
-    print(f"  Untagged (>=2018, fetch ok): spdx={spdx_n}  cdx={cdx_n}  total={len(df)}")
+    print(f"  All issues (>=2018, fetch ok): spdx={spdx_n}  cdx={cdx_n}  total={len(df)}")
     return df
 
 
 # ── OpenRouter API call ──────────────────────────────────────────────────────
 
 class _RateLimited(Exception):
+    pass
+
+class _ModelLoading(Exception):
     pass
 
 
@@ -159,26 +157,77 @@ class _RateLimited(Exception):
 )
 def _call_api(payload: dict, headers: dict) -> str:
     resp = requests.post(
-        "https://openrouter.ai/api/v1/chat/completions",
+        f"{VLLM_BASE_URL}/chat/completions",
         headers=headers,
         json=payload,
-        timeout=30,
+        timeout=300,
     )
-    if resp.status_code in (429, 503):
-        raise _RateLimited(f"HTTP {resp.status_code}")
+    if resp.status_code == 503:
+        raise _ModelLoading("HTTP 503 — model still loading")
+    if resp.status_code == 429:
+        raise _RateLimited(f"HTTP 429")
     resp.raise_for_status()
     data = resp.json()
     msg = (data.get("choices") or [{}])[0].get("message", {})
-    content = msg.get("content")
+    content = msg.get("content") or ""
+    # Strip <think>...</think> blocks emitted by reasoning models before the JSON
+    content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL).strip()
     if not content:
-        # Some reasoning models put answer only in reasoning text; extract from there
+        # Fallback: some models put the answer only in the reasoning field
         reasoning = msg.get("reasoning", "") or ""
         for detail in msg.get("reasoning_details", []):
             reasoning += detail.get("text", "")
-        if reasoning:
-            return reasoning
+        content = re.sub(r"<think>.*?</think>", "", reasoning, flags=re.DOTALL).strip()
+    if not content:
         raise ValueError(f"empty content, finish_reason={((data.get('choices') or [{}])[0].get('finish_reason'))}")
-    return content.strip()
+    return content
+
+
+def wake_model(poll_interval: int = 30, max_wait: int = 1800):
+    """
+    Send a cheap ping to wake an on-demand model, then poll until it responds 200.
+    max_wait=1800s covers the worst-case ~13-min cold start with margin.
+    """
+    ping_payload = {
+        "model": MODEL_ID,
+        "messages": [{"role": "user", "content": "ping"}],
+        "max_tokens": 1,
+    }
+    headers = {"Content-Type": "application/json"}
+
+    print(f"  Waking model '{MODEL_ID}' (on-demand, cold-start up to ~13 min)...")
+    # First request triggers the wake — 503 is expected
+    try:
+        requests.post(f"{VLLM_BASE_URL}/chat/completions", headers=headers,
+                      json=ping_payload, timeout=10)
+    except Exception:
+        pass
+
+    elapsed = 0
+    while elapsed < max_wait:
+        time.sleep(poll_interval)
+        elapsed += poll_interval
+        try:
+            r = requests.post(f"{VLLM_BASE_URL}/chat/completions", headers=headers,
+                              json=ping_payload, timeout=30)
+            if r.status_code == 200:
+                print(f"  Model ready after ~{elapsed}s.")
+                return
+            print(f"  still loading ({r.status_code})... {elapsed}s elapsed")
+        except Exception as e:
+            print(f"  poll error: {e} — retrying")
+
+    raise RuntimeError(f"Model '{MODEL_ID}' did not become ready within {max_wait}s.")
+
+
+def _call_api_with_wake(payload: dict, headers: dict) -> str:
+    """Call _call_api; if 503, wake the model and retry once."""
+    try:
+        return _call_api(payload, headers)
+    except _ModelLoading:
+        print("  503 received mid-run — model went to sleep, re-waking...")
+        wake_model()
+        return _call_api(payload, headers)
 
 
 def _valid_categories(cats) -> list[str]:
@@ -190,14 +239,12 @@ def _valid_categories(cats) -> list[str]:
 
 def classify_issue(title: str, body: str, url: str) -> dict:
     """Returns dict with 'categories' (list), 'confidence', 'reasoning'."""
-    user_msg = f"GitHub issue URL: {url}\n\nTitle: {title}\n\nBody (truncated to 800 chars):\n{body[:800]}"
+    body_trunc = body[:1600] + ("\n...\n" + body[-400:] if len(body) > 2100 else "")
+    user_msg = f"GitHub issue URL: {url}\n\nTitle: {title}\n\nBody:\n{body_trunc}"
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://github.com/wip-24-ali-sbom-emse",
-        "X-Title": "SBOM Issue Classifier",
-    }
+    headers = {"Content-Type": "application/json"}
+    if OPENROUTER_API_KEY:
+        headers["Authorization"] = f"Bearer {OPENROUTER_API_KEY}"
     payload = {
         "model": MODEL_ID,
         "messages": [
@@ -210,7 +257,7 @@ def classify_issue(title: str, body: str, url: str) -> dict:
 
     for attempt in range(MAX_RETRIES):
         try:
-            content = _call_api(payload, headers)
+            content = _call_api_with_wake(payload, headers)
             if '{' in content:
                 decoder = json.JSONDecoder()
                 braces = list(re.finditer(r'\{', content))
@@ -259,29 +306,32 @@ def classify_issue(title: str, body: str, url: str) -> dict:
             print(f"    err attempt {attempt+1}: {short}")
         time.sleep(RETRY_DELAY * (attempt + 1))
 
-    raise RuntimeError(f"All {MAX_RETRIES} retries exhausted for {url}")
+    print(f"    WARNING: all {MAX_RETRIES} retries exhausted for {url} — assigning empty categories")
+    return {"categories": [], "confidence": "low", "reasoning": "classification failed after all retries"}
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
     print(f"Model:    {MODEL_ID}")
+    print(f"Endpoint: {VLLM_BASE_URL}")
     print(f"Output:   {OUT_FILE}")
     print(f"Source:   {CONTENT_FILE}")
     print(f"Min year: {MIN_YEAR}\n")
 
-    all_untagged = load_untagged()
+    all_issues = load_all_issues()
+    wake_model()
 
     if DRY_RUN:
         print("\n── DRY RUN: first 3 issues ──")
-        for _, row in all_untagged.head(3).iterrows():
+        for _, row in all_issues.head(3).iterrows():
             print(f"\nURL:    {row['issue_url']}")
             print(f"Format: {row['format']}")
             print(f"Title:  {row['title']}")
             print(f"Body:   {str(row['body'])[:200]}\n---")
         return
 
-    # Resume support (done_urls = unique issue URLs, since output is exploded)
+    # Resume support: skip issues already present in the output file
     if OUT_FILE.exists():
         done = pd.read_csv(OUT_FILE)
         done_urls = set(done["issue_url"].dropna().unique().tolist())
@@ -291,24 +341,18 @@ def main():
         done_urls = set()
 
     results = []
-    remaining = [r for _, r in all_untagged.iterrows() if str(r["issue_url"]) not in done_urls]
+    remaining = [r for _, r in all_issues.iterrows() if str(r["issue_url"]) not in done_urls]
     total_new = len(remaining)
     print(f"  Issues left to label: {total_new}")
 
     for new_i, row in enumerate(remaining, 1):
-        url = str(row["issue_url"])
-        fmt   = str(row["format"])
-        repo  = str(row.get("repo", ""))
-        title = str(row.get("title", ""))
-        body  = str(row.get("body", ""))
-
+        url    = str(row["issue_url"])
+        fmt    = str(row["format"])
+        repo   = str(row.get("repo", ""))
+        title  = str(row.get("title", ""))
+        body   = str(row.get("body", ""))
         print(f"  [{new_i}/{total_new}] {fmt.upper()} | {title[:65]}")
-        try:
-            result = classify_issue(title, body, url)
-        except RuntimeError as e:
-            _save(done, results)
-            print(f"\nFATAL: {e}\nProgress saved. Exiting.")
-            return
+        result = classify_issue(title, body, url)
         cats = result["categories"]
         if not cats:
             print(f"           → SKIPPED (off-topic/spam, no categories)")
@@ -316,23 +360,20 @@ def main():
             continue
         print(f"           → {', '.join(cats)}")
 
-        results.append({
+        new_row = {
             "issue_url":      url,
             "format":         fmt,
             "repo":           repo,
             "created_at":     row.get("created_at", ""),
             "title":          title,
-            "llm_categories": str(cats),
+            "devstral_categories": str(cats),
             "model":          MODEL_ID,
-        })
-
-        if len(results) % 100 == 0:
-            _save(done, results)
-            print(f"  [checkpoint] {len(done) + len(results)} issues saved")
+        }
+        results.append(new_row)
+        _save(done, results)
 
         time.sleep(0.3)
 
-    _save(done, results)
     final = pd.concat([done, pd.DataFrame(results)], ignore_index=True) if results else done
     print(f"\nDone. {len(final)} issues classified → {OUT_FILE}")
 

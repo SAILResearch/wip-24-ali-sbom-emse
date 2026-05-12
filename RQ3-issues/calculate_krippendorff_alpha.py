@@ -2,7 +2,7 @@
 Compute Krippendorff's Alpha from sample_issues.csv.
 
 sample_issues.csv contains one row per issue with LLM and human tag lists:
-  issue_url, format, repo, created_at, title, qwen_categories, human_categories
+  issue_url, format, repo, created_at, title, devstral_categories, human_categories
 
 Alpha is computed as: 2 raters × (N_SAMPLE × 14) binary units, nominal level.
 
@@ -49,7 +49,7 @@ def main():
     df = pd.read_csv(SAMPLE_FILE)
     print(f"  {len(df)} issues")
 
-    q_matrix = np.stack(df["qwen_categories"].apply(to_binary_row).values)
+    q_matrix = np.stack(df["devstral_categories"].apply(to_binary_row).values)
     m_matrix = np.stack(df["human_categories"].apply(to_binary_row).values)
 
     reliability_matrix = np.array([
