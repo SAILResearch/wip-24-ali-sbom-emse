@@ -70,5 +70,5 @@ Python dependencies are listed in:
 
 ## Notes
 
-- Reproducing-command instructions are intentionally omitted for now.
+- Reproduction commands are intentionally omitted for now.
 - Some analyses are implemented in Python notebooks/scripts, while others are implemented in R scripts.
