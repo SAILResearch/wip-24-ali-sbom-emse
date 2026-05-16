@@ -1,4 +1,4 @@
-# wip-24-ali-sbom-emse
+# The State of the SBOM Tool Ecosystems: A Comparative Analysis of SPDX and CycloneDX
 
 This repository contains the datasets, scripts, notebooks, and figures used in an empirical study of SBOM ecosystems, with a focus on SPDX and CycloneDX.
 
