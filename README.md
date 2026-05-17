@@ -64,9 +64,10 @@ The repository includes both intermediate and final artifacts, including:
 
 ## Environment
 
-Python dependencies are listed in:
-
-- `requirements.txt`
+ This artifact uses both Python and R:
+ - Python dependencies are listed in `requirements.txt`.
+ - R is required for the analyses implemented in `.R` scripts, including those in `RQ1-usecases/`, `RQ2-tools/`, `RQ3-issues/`, and `RQ4-project/`.
+ - Before reproducing the R-based analyses, install the R packages referenced by those scripts in your local R environment.
 
 ## Notes
 
