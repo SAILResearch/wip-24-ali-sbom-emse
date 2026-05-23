@@ -106,6 +106,20 @@ Rules:
 - Prefer specificity: if an issue matches both a general category (Bug Fixes) and a specific one (Technical Debt or Licensing), include both.
 - Respond with ONLY a JSON object: {{"categories": ["<exact category name>", ...], "reasoning": "<one sentence>"}}
 - Do not add any text outside the JSON object.
+
+Examples:
+
+Issue title: "Wrong SPDX license identifier emitted for Apache-2.0 with exceptions"
+Issue body: "When generating an SPDX document, the license expression for Apache-2.0 WITH LLVM-exception is written as 'Apache-2.0-LLVM-exception' instead of the correct 'Apache-2.0 WITH LLVM-exception'. This causes validation failures downstream."
+{{"categories": ["Bug Fixes and Defects", "Licensing"], "reasoning": "The issue reports incorrect output (bug) specifically in license expression formatting, so both the defect category and the licensing-specific category apply."}}
+
+Issue title: "Add Rust/Cargo ecosystem support"
+Issue body: "Currently the tool has no support for Rust projects using Cargo. We should be able to scan Cargo.toml and Cargo.lock files to enumerate crate dependencies and include them in the generated SBOM."
+{{"categories": ["Integration and Interfacing"], "reasoning": "This is a request to add support for a new language ecosystem (Rust/Cargo), which is the definition of Integration and Interfacing."}}
+
+Issue title: "Refactor PackageURL parsing to reduce duplication across parsers"
+Issue body: "The PackageURL parsing logic is copy-pasted across 6 different ecosystem parsers. We should extract it into a shared utility to reduce maintenance burden and prevent drift. This has been on the backlog for over a year."
+{{"categories": ["Code Quality", "Technical Debt"], "reasoning": "The issue describes deduplication refactoring (Code Quality) driven by long-deferred accumulated duplication (Technical Debt), so both apply."}}
 """
 
 # ── Load all issues from content cache ──────────────────────────────────────
