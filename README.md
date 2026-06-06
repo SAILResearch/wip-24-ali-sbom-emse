@@ -82,7 +82,18 @@ This artifact uses both Python and R:
 - R is required for the analyses implemented in `.R` scripts, including those in `RQ1-usecases/`, `RQ2-tools/`, `RQ3-issues/`, and `RQ4-project/`.
 - Before reproducing the R-based analyses, install the R packages referenced by those scripts in your local R environment.
 
-## Notes
+## Citation
 
-- Reproduction commands are intentionally omitted for now.
-- Some analyses are implemented in Python notebooks/scripts, while others are implemented in R scripts.
+If you use this work, please cite our paper:
+
+```bibtex
+@misc{zhao2025statesbomtoolecosystems,
+      title={The State of the SBOM Tool Ecosystems: A Comparative Analysis of SPDX and CycloneDX},
+      author={Zhimin Zhao and Abdul Ali Bangash and Tongxu Ge and Arshdeep Singh and Zitao Wang and Bram Adams},
+      year={2025},
+      eprint={2512.21781},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2512.21781},
+}
+```

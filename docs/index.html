@@ -640,9 +640,9 @@ createApp({
 
     // ---- RQ1 KEY FINDINGS ----
     const rq1KeyFindings = [
-      { value: '108 OSS + 62',  label: 'Tools Compared',      note: 'Open-source and proprietary SBOM tools across both formats' },
-      { value: '9',             label: 'NTIA Use Cases',       note: 'Build, Analyze, View, Translate, Diff, Edit, Consume, Transform, Support' },
-      { value: 'Proprietary >',  label: 'OSS Coverage Gap',   note: 'Proprietary tools outperform OSS especially in Analyze and View use cases' },
+      { value: '108',  label: 'Open-Source Tools',   note: 'OSS SBOM tools manually analyzed across SPDX and CycloneDX' },
+      { value: '62',   label: 'Proprietary Tools',   note: 'Proprietary SBOM tools included for use-case comparison' },
+      { value: '9',    label: 'NTIA Use Cases',       note: 'Build, Analyze, View, Translate, Diff, Edit, Consume, Transform, Support' },
     ];
 
     // ---- USE CASE HIGHLIGHTS ----
@@ -696,12 +696,14 @@ createApp({
     ];
 
     // ---- BIBTEX ----
-    const bibtex = `@article{zhao2025sbom,
-  title={The State of the SBOM Tool Ecosystems: A Comparative Analysis of SPDX and CycloneDX},
-  author={Zhimin Zhao and Abdul Ali Bangash and Tongxu Ge and Arshdeep Singh and Zitao Wang and Bram Adams},
-  journal={Empirical Software Engineering},
-  year={2025},
-  publisher={Springer}
+    const bibtex = `@misc{zhao2025statesbomtoolecosystems,
+      title={The State of the SBOM Tool Ecosystems: A Comparative Analysis of SPDX and CycloneDX},
+      author={Zhimin Zhao and Abdul Ali Bangash and Tongxu Ge and Arshdeep Singh and Zitao Wang and Bram Adams},
+      year={2025},
+      eprint={2512.21781},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2512.21781},
 }`;
 
     const copyLabel = ref('Copy');
