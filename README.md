@@ -1,5 +1,8 @@
 # The State of the SBOM Tool Ecosystems: A Comparative Analysis of SPDX and CycloneDX
 
+[![arXiv](https://img.shields.io/badge/arXiv-2512.21781-b31b1b.svg)](https://arxiv.org/abs/2512.21781)
+[![Project](https://img.shields.io/badge/Project-Website-2ea44f.svg)](https://sailresearch.github.io/26-ali-sbom-emse)
+
 This repository contains the datasets, scripts, notebooks, and figures used in an empirical study of SBOM ecosystems, with a focus on SPDX and CycloneDX.
 
 ## Overview
